@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">IntentSender</string>
+    <string name="intent_impl_internal">Test Intent Impliciti Interni</string>
+    <string name="intent_expl_internal">Test Intent Espliciti Interni</string>
+    <string name="function_call">Test Chiamata Diretta a Funzione</string>
+    <string name="invokejava">Measure Java</string>
+    <string name="intent_impl_external">Test Intent Impliciti Esterni</string>
+    <string name="intent_expl_external">Test Intent Espliciti Esterni</string>
+    <string name="intent_service_internal">Test Intent Esplicito a Servizio Interno</string>
+    <string name="intent_service_external">Test Intent Esplicito a Servizio Esterno</string>
+    <string name="default_result">Result: N/A</string>
+</resources>
