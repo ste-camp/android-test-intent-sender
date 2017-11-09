@@ -36,6 +36,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <Button android:id="@+id/intent_service_aidl"
+            android:text="@string/intent_service_aidl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <Button android:id="@+id/intent_service_external"
             android:text="@string/intent_service_external"
             android:layout_width="wrap_content"

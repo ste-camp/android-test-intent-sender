@@ -8,5 +8,6 @@
     <string name="intent_expl_external">Test Intent Espliciti Esterni</string>
     <string name="intent_service_internal">Test Intent Esplicito a Servizio Interno</string>
     <string name="intent_service_external">Test Intent Esplicito a Servizio Esterno</string>
+    <string name="intent_service_aidl">Test Intent Esplicito a Servizio AIDL</string>
     <string name="default_result">Result: N/A</string>
 </resources>

@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import it.neslab.intentreceiver.ServiceInterface;
+
 public class IntentSender extends AppCompatActivity {
 
     public static final int MEASURE_START = 1;
@@ -42,6 +44,7 @@ public class IntentSender extends AppCompatActivity {
         Button invokeInternalDirectCall = (Button) findViewById(R.id.function_call);
         Button invokeServiceInternal = (Button) findViewById(R.id.intent_service_internal);
         Button invokeServiceExternal = (Button) findViewById(R.id.intent_service_external);
+        Button invokeServiceAidl = (Button) findViewById(R.id.intent_service_aidl);
 
         invokeInternalImplButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +55,7 @@ public class IntentSender extends AppCompatActivity {
                 findViewById(R.id.intent_impl_internal).setEnabled(false);
                 findViewById(R.id.intent_service_internal).setEnabled(false);
                 findViewById(R.id.intent_service_external).setEnabled(false);
+                findViewById(R.id.intent_service_aidl).setEnabled(false);
                 findViewById(R.id.function_call).setEnabled(false);
 
                 Intent in = new Intent(ACTION_TEST);
@@ -74,6 +78,7 @@ public class IntentSender extends AppCompatActivity {
                 findViewById(R.id.intent_impl_internal).setEnabled(false);
                 findViewById(R.id.intent_service_internal).setEnabled(false);
                 findViewById(R.id.intent_service_external).setEnabled(false);
+                findViewById(R.id.intent_service_aidl).setEnabled(false);
                 findViewById(R.id.function_call).setEnabled(false);
 
                 Intent in = new Intent(IntentSender.this, IntentReceiver.class);
@@ -94,6 +99,7 @@ public class IntentSender extends AppCompatActivity {
                 findViewById(R.id.intent_impl_internal).setEnabled(false);
                 findViewById(R.id.intent_service_internal).setEnabled(false);
                 findViewById(R.id.intent_service_external).setEnabled(false);
+                findViewById(R.id.intent_service_aidl).setEnabled(false);
                 findViewById(R.id.function_call).setEnabled(false);
 
                 Intent in = new Intent(ACTION_TEST_EXTERNAL);
@@ -115,6 +121,7 @@ public class IntentSender extends AppCompatActivity {
                 findViewById(R.id.intent_impl_internal).setEnabled(false);
                 findViewById(R.id.intent_service_internal).setEnabled(false);
                 findViewById(R.id.intent_service_external).setEnabled(false);
+                findViewById(R.id.intent_service_aidl).setEnabled(false);
                 findViewById(R.id.function_call).setEnabled(false);
 
                 Intent in = new Intent();
@@ -137,6 +144,7 @@ public class IntentSender extends AppCompatActivity {
                 findViewById(R.id.intent_impl_internal).setEnabled(false);
                 findViewById(R.id.intent_service_internal).setEnabled(false);
                 findViewById(R.id.intent_service_external).setEnabled(false);
+                findViewById(R.id.intent_service_aidl).setEnabled(false);
                 findViewById(R.id.function_call).setEnabled(false);
 
                 InternalCalled inte = new InternalCalled();
@@ -161,6 +169,7 @@ public class IntentSender extends AppCompatActivity {
                 findViewById(R.id.intent_impl_internal).setEnabled(true);
                 findViewById(R.id.intent_service_internal).setEnabled(true);
                 findViewById(R.id.intent_service_external).setEnabled(true);
+                findViewById(R.id.intent_service_aidl).setEnabled(true);
                 findViewById(R.id.function_call).setEnabled(true);
             }
         });
@@ -174,6 +183,7 @@ public class IntentSender extends AppCompatActivity {
                 findViewById(R.id.intent_impl_internal).setEnabled(false);
                 findViewById(R.id.intent_service_internal).setEnabled(false);
                 findViewById(R.id.intent_service_external).setEnabled(false);
+                findViewById(R.id.intent_service_aidl).setEnabled(false);
                 findViewById(R.id.function_call).setEnabled(false);
 
                 Intent serv = new Intent(IntentSender.this, ReceiverService.class);
@@ -195,6 +205,7 @@ public class IntentSender extends AppCompatActivity {
                 findViewById(R.id.intent_impl_internal).setEnabled(false);
                 findViewById(R.id.intent_service_internal).setEnabled(false);
                 findViewById(R.id.intent_service_external).setEnabled(false);
+                findViewById(R.id.intent_service_aidl).setEnabled(false);
                 findViewById(R.id.function_call).setEnabled(false);
 
                 Intent serv = new Intent();
@@ -206,6 +217,29 @@ public class IntentSender extends AppCompatActivity {
 
                 externalConn = new MessengerConnection();
                 IntentSender.this.bindService(serv, externalConn, BIND_AUTO_CREATE);
+            }
+        });
+
+        invokeServiceAidl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findViewById(R.id.intent_expl_external).setEnabled(false);
+                findViewById(R.id.intent_impl_external).setEnabled(false);
+                findViewById(R.id.intent_expl_internal).setEnabled(false);
+                findViewById(R.id.intent_impl_internal).setEnabled(false);
+                findViewById(R.id.intent_service_internal).setEnabled(false);
+                findViewById(R.id.intent_service_external).setEnabled(false);
+                findViewById(R.id.intent_service_aidl).setEnabled(false);
+                findViewById(R.id.function_call).setEnabled(false);
+
+                Intent serv = new Intent();
+                serv.setComponent(new ComponentName("it.neslab.intentreceiver", "it.neslab.intentreceiver.AidlService"));
+                serv.putExtra("n_tests", 100);
+                baseIntent = (Intent)serv.clone();
+                serv.putExtra("mode", MEASURE_START);
+                serv.putExtra("starting", System.currentTimeMillis());
+
+                IntentSender.this.bindService(serv, new AidlConnection(), BIND_AUTO_CREATE);
             }
         });
     }
@@ -240,6 +274,7 @@ public class IntentSender extends AppCompatActivity {
                     findViewById(R.id.intent_impl_internal).setEnabled(true);
                     findViewById(R.id.intent_service_internal).setEnabled(true);
                     findViewById(R.id.intent_service_external).setEnabled(true);
+                    findViewById(R.id.intent_service_aidl).setEnabled(true);
                     findViewById(R.id.function_call).setEnabled(true);
                 }
                 break;
@@ -294,6 +329,7 @@ public class IntentSender extends AppCompatActivity {
                         findViewById(R.id.intent_impl_internal).setEnabled(true);
                         findViewById(R.id.intent_service_internal).setEnabled(true);
                         findViewById(R.id.intent_service_external).setEnabled(true);
+                        findViewById(R.id.intent_service_aidl).setEnabled(true);
                         findViewById(R.id.function_call).setEnabled(true);
                     }
                     break;
@@ -332,7 +368,7 @@ public class IntentSender extends AppCompatActivity {
             Bundle data = msg.getData();
             unbindService(externalConn);
 
-            switch (data.getInt("mode")){
+            switch (data.getInt("mode")){//TODO add timing tests of RPC calls
                 case MEASURE_START:
                     measurement_count = 0;
                     measurement_sum = 0L;
@@ -361,10 +397,65 @@ public class IntentSender extends AppCompatActivity {
                         findViewById(R.id.intent_impl_internal).setEnabled(true);
                         findViewById(R.id.intent_service_internal).setEnabled(true);
                         findViewById(R.id.intent_service_external).setEnabled(true);
+                        findViewById(R.id.intent_service_aidl).setEnabled(true);
                         findViewById(R.id.function_call).setEnabled(true);
                     }
                     break;
             }
+        }
+    }
+
+    private class AidlConnection implements ServiceConnection{
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ServiceInterface aidlService = ServiceInterface.Stub.asInterface(service);
+
+            try {
+                switch (aidlService.getMode()){
+                    case MEASURE_START:
+                        measurement_count = 0;
+                        measurement_sum = 0L;
+                        measurement_first = aidlService.getCallTime() - aidlService.getStart();
+                    case MEASURE_CONTINUE:
+                        measurement_count++;
+                        measurement_sum += aidlService.getCallTime() - aidlService.getStart();
+                        Integer total = aidlService.getNTests();
+
+                        IntentSender.this.unbindService(this);
+
+                        setResultText("Misura in corso: test n°".concat(measurement_count.toString()).concat("/").concat(total.toString()));
+                        if(measurement_count < total){
+                            Intent next = (Intent)baseIntent.clone();
+                            next.putExtra("starting", System.currentTimeMillis());
+                            next.putExtra("mode", MEASURE_CONTINUE);
+                            IntentSender.this.bindService(next, this, BIND_AUTO_CREATE);
+                        }
+                        else{
+                            setResultText("Misura Terminata: tempo medio di bind "
+                                    .concat(Float.toString(measurement_sum.floatValue()/measurement_count.floatValue()))
+                                    .concat("ms su ").concat(measurement_count.toString()).concat(" test ")
+                                    .concat("| Test a Freddo: ").concat(measurement_first.toString()).concat("ms"));
+
+                            findViewById(R.id.intent_expl_external).setEnabled(true);
+                            findViewById(R.id.intent_impl_external).setEnabled(true);
+                            findViewById(R.id.intent_expl_internal).setEnabled(true);
+                            findViewById(R.id.intent_impl_internal).setEnabled(true);
+                            findViewById(R.id.intent_service_internal).setEnabled(true);
+                            findViewById(R.id.intent_service_external).setEnabled(true);
+                            findViewById(R.id.intent_service_aidl).setEnabled(true);
+                            findViewById(R.id.function_call).setEnabled(true);
+                        }
+                        break;
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
         }
     }
 }
