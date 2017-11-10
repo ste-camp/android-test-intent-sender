@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Random;
+
 import it.neslab.intentreceiver.ServiceInterface;
 
 public class IntentSender extends AppCompatActivity {
@@ -29,6 +32,7 @@ public class IntentSender extends AppCompatActivity {
     private Long measurement_first;
     private Integer measurement_count;
     private Long measurement_sum;
+    private Long[] marshalling_sums = {0L,0L,0L,0L,0L};
 
     private MessengerConnection externalConn;
 
@@ -368,7 +372,7 @@ public class IntentSender extends AppCompatActivity {
             Bundle data = msg.getData();
             unbindService(externalConn);
 
-            switch (data.getInt("mode")){//TODO add timing tests of RPC calls
+            switch (data.getInt("mode")){
                 case MEASURE_START:
                     measurement_count = 0;
                     measurement_sum = 0L;
@@ -425,6 +429,7 @@ public class IntentSender extends AppCompatActivity {
                         IntentSender.this.unbindService(this);
 
                         setResultText("Misura in corso: test n°".concat(measurement_count.toString()).concat("/").concat(total.toString()));
+                        testMarshall(aidlService);
                         if(measurement_count < total){
                             Intent next = (Intent)baseIntent.clone();
                             next.putExtra("starting", System.currentTimeMillis());
@@ -435,7 +440,12 @@ public class IntentSender extends AppCompatActivity {
                             setResultText("Misura Terminata: tempo medio di bind "
                                     .concat(Float.toString(measurement_sum.floatValue()/measurement_count.floatValue()))
                                     .concat("ms su ").concat(measurement_count.toString()).concat(" test ")
-                                    .concat("| Test a Freddo: ").concat(measurement_first.toString()).concat("ms"));
+                                    .concat("| Test a Freddo: ").concat(measurement_first.toString()).concat("ms")
+                                    .concat("\nChiamata a metodo con 1int,1double,1Map(100size): ").concat(Float.toString(marshalling_sums[0].floatValue()/measurement_count.floatValue()))
+                                    .concat("\nChiamata a metodo con 1int,1double,1Map(200size): ").concat(Float.toString(marshalling_sums[1].floatValue()/measurement_count.floatValue()))
+                                    .concat("\nChiamata a metodo con 1int,1double,1Map(300size): ").concat(Float.toString(marshalling_sums[2].floatValue()/measurement_count.floatValue()))
+                                    .concat("\nChiamata a metodo con 1int,1double,1Map(400size): ").concat(Float.toString(marshalling_sums[3].floatValue()/measurement_count.floatValue()))
+                                    .concat("\nChiamata a metodo con 1int,1double,1Map(500size): ").concat(Float.toString(marshalling_sums[4].floatValue()/measurement_count.floatValue())));
 
                             findViewById(R.id.intent_expl_external).setEnabled(true);
                             findViewById(R.id.intent_impl_external).setEnabled(true);
@@ -456,6 +466,24 @@ public class IntentSender extends AppCompatActivity {
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
+        }
+
+        private void testMarshall(ServiceInterface s){
+            HashMap<Integer, Integer> map = new HashMap<>();
+
+            Random r = new Random();
+            Long ts;
+            for(int i=0; i<5; i++) {
+                for(int j=0;j<100;j++){
+                    map.put(j, r.nextInt());
+                }
+                try {
+                    ts = System.currentTimeMillis();
+                    marshalling_sums[i] += s.testMethod(10, 19852.5, map) - ts;
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
