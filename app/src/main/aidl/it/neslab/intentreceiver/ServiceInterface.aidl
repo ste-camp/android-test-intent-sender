@@ -15,5 +15,5 @@ interface ServiceInterface {
 
     int getNTests();
 
-    String testMethod(int a, double b, inout Map c);
+    long testMethod(int a, double b, inout Map c);
 }
