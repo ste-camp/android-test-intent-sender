@@ -14,4 +14,6 @@ interface ServiceInterface {
     int getMode();
 
     int getNTests();
+
+    String testMethod(int a, double b, inout Map c);
 }
